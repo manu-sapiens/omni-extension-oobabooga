@@ -1,0 +1,9 @@
+title: Oobabooga
+version: 0.0.1
+description: An extension to manage and use LLMs provided through Oobabooga
+author: Emmanuel Lusinchi
+origin: https://github.com/manu-sapiens/omni-extension-oobabooga.git
+client:
+  addToWorkbench: false
+supports:
+  blocks:v2
