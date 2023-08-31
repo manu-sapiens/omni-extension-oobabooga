@@ -88,11 +88,11 @@ __metadata:
   linkType: hard
 
 "@babel/parser@npm:^7.22.11, @babel/parser@npm:^7.22.5":
-  version: 7.22.13
-  resolution: "@babel/parser@npm:7.22.13"
+  version: 7.22.14
+  resolution: "@babel/parser@npm:7.22.14"
   bin:
     parser: ./bin/babel-parser.js
-  checksum: b774ae635fc0f019cc9e366fe42e5de35b46b52a0e61e6a2f136f8c822bfde16e13505a47a1aedc846312dd8fd4db7054c7d4039dc7641320d9c17f07004f200
+  checksum: a2293971f0889726a3d5a35fcceedc71d2fa4c8d97f438fc348fe0cf7e739affc6e2665e4c6ddd4900714772e19bfd5d6feb967ca1f623b894c0099ecb148b52
   languageName: node
   linkType: hard
 
@@ -593,11 +593,11 @@ __metadata:
 
 "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#main":
   version: 1.0.0
-  resolution: "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#commit=8e6c3d19075ae4934066faf38315df04bb72744f"
+  resolution: "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#commit=3f5d8431f703b31317ef98487e10b728577e0336"
   dependencies:
     gpt-tokenizer: ^2.1.1
     omnilib-utils: "https://github.com/manu-sapiens/omnilib-utils.git#main"
-  checksum: a8b590fb20fd61bf3866708d68bd4eebfef7df8dbc2b791523fbd663b25af2c7d286da5b92a869a55528a9e183bb963b58a278b363af62f62698f0aaa8543014
+  checksum: 076b1c6655a02b1a2650f4b3957e0b11d2525e0d0125350a89f27250f75f5d3fc8fdc1530cc2acd08b51a3523126d4017c438b92bc9652914247da79c49f0045
   languageName: node
   linkType: hard
 
