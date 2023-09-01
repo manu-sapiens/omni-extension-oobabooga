@@ -1,12 +1,12 @@
 //@ts-check
 import { createLlmQueryComponent, extractPayload } from 'omnilib-llms/llmComponent';
 
-import { Llm_Oobabooga } from './llm_Oobabooga.js'
-const MODEL_PROVIDER = 'oobabooga';
+import { Llm_Oobabooga, MODEL_PROVIDER} from './llm_Oobabooga.js'
+
 
 const llm = new Llm_Oobabooga();
 const links = {}; // TBD: provide proper links
-const LlmQueryComponent_Oobabooga =  createLlmQueryComponent(MODEL_PROVIDER, links, runProviderPayload );
+export const LlmQueryComponent_Oobabooga =  createLlmQueryComponent(MODEL_PROVIDER, links, runProviderPayload );
 
 async function runProviderPayload(payload, ctx) 
 {
@@ -14,5 +14,3 @@ async function runProviderPayload(payload, ctx)
     const response = await llm.query(ctx, prompt, instruction, model_name, temperature, args);
     return response;
 }
-
-export { LlmQueryComponent_Oobabooga };

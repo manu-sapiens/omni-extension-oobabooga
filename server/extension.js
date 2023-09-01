@@ -5087,8 +5087,9 @@ var reduceDescriptors = (obj, reducer) => {
   const descriptors2 = Object.getOwnPropertyDescriptors(obj);
   const reducedDescriptors = {};
   forEach(descriptors2, (descriptor, name) => {
-    if (reducer(descriptor, name, obj) !== false) {
-      reducedDescriptors[name] = descriptor;
+    let ret;
+    if ((ret = reducer(descriptor, name, obj)) !== false) {
+      reducedDescriptors[name] = ret || descriptor;
     }
   });
   Object.defineProperties(obj, reducedDescriptors);
@@ -5617,9 +5618,6 @@ function formDataToJSON(formData) {
   return null;
 }
 var formDataToJSON_default = formDataToJSON;
-var DEFAULT_CONTENT_TYPE = {
-  "Content-Type": void 0
-};
 function stringifySafely(rawValue, parser, encoder2) {
   if (utils_default.isString(rawValue)) {
     try {
@@ -5635,7 +5633,7 @@ function stringifySafely(rawValue, parser, encoder2) {
 }
 var defaults = {
   transitional: transitional_default,
-  adapter: ["xhr", "http"],
+  adapter: browser_default.isNode ? "http" : "xhr",
   transformRequest: [function transformRequest(data, headers) {
     const contentType = headers.getContentType() || "";
     const hasJSONContentType = contentType.indexOf("application/json") > -1;
@@ -5718,15 +5716,13 @@ var defaults = {
   },
   headers: {
     common: {
-      "Accept": "application/json, text/plain, */*"
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": void 0
     }
   }
 };
-utils_default.forEach(["delete", "get", "head"], function forEachMethodNoData(method) {
+utils_default.forEach(["delete", "get", "head", "post", "put", "patch"], (method) => {
   defaults.headers[method] = {};
-});
-utils_default.forEach(["post", "put", "patch"], function forEachMethodWithData(method) {
-  defaults.headers[method] = utils_default.merge(DEFAULT_CONTENT_TYPE);
 });
 var defaults_default = defaults;
 var ignoreDuplicateOf = utils_default.toObjectSet([
@@ -5977,7 +5973,15 @@ var AxiosHeaders = class {
   }
 };
 AxiosHeaders.accessor(["Content-Type", "Content-Length", "Accept", "Accept-Encoding", "User-Agent", "Authorization"]);
-utils_default.freezeMethods(AxiosHeaders.prototype);
+utils_default.reduceDescriptors(AxiosHeaders.prototype, ({ value }, key) => {
+  let mapped = key[0].toUpperCase() + key.slice(1);
+  return {
+    get: () => value,
+    set(headerValue) {
+      this[mapped] = headerValue;
+    }
+  };
+});
 utils_default.freezeMethods(AxiosHeaders);
 var AxiosHeaders_default = AxiosHeaders;
 function transformData(fns, response) {
@@ -6475,7 +6479,7 @@ function mergeConfig(config1, config2) {
   });
   return config;
 }
-var VERSION = "1.4.0";
+var VERSION = "1.5.0";
 var validators = {};
 ["object", "boolean", "number", "function", "string", "symbol"].forEach((type, i) => {
   validators[type] = function validator(thing) {
@@ -6578,12 +6582,11 @@ var Axios = class {
       }
     }
     config.method = (config.method || this.defaults.method || "get").toLowerCase();
-    let contextHeaders;
-    contextHeaders = headers && utils_default.merge(
+    let contextHeaders = headers && utils_default.merge(
       headers.common,
       headers[config.method]
     );
-    contextHeaders && utils_default.forEach(
+    headers && utils_default.forEach(
       ["delete", "get", "head", "post", "put", "patch", "common"],
       (method) => {
         delete headers[method];
@@ -6648,7 +6651,7 @@ var Axios = class {
     return buildURL(fullPath, config.params, config.paramsSerializer);
   }
 };
-utils_default.forEach(["delete", "get", "head", "options"], function forEachMethodNoData2(method) {
+utils_default.forEach(["delete", "get", "head", "options"], function forEachMethodNoData(method) {
   Axios.prototype[method] = function(url, config) {
     return this.request(mergeConfig(config || {}, {
       method,
@@ -6657,7 +6660,7 @@ utils_default.forEach(["delete", "get", "head", "options"], function forEachMeth
     }));
   };
 });
-utils_default.forEach(["post", "put", "patch"], function forEachMethodWithData2(method) {
+utils_default.forEach(["post", "put", "patch"], function forEachMethodWithData(method) {
   function generateHTTPMethod(isForm) {
     return function httpMethod(url, data, config) {
       return this.request(mergeConfig(config || {}, {
@@ -6866,6 +6869,7 @@ axios.isAxiosError = isAxiosError;
 axios.mergeConfig = mergeConfig;
 axios.AxiosHeaders = AxiosHeaders_default;
 axios.formToJSON = (thing) => formDataToJSON_default(utils_default.isHTMLForm(thing) ? new FormData(thing) : thing);
+axios.getAdapter = adapters_default.getAdapter;
 axios.HttpStatusCode = HttpStatusCode_default;
 axios.default = axios;
 var axios_default = axios;
@@ -6884,6 +6888,7 @@ var {
   AxiosHeaders: AxiosHeaders2,
   HttpStatusCode: HttpStatusCode2,
   formToJSON,
+  getAdapter,
   mergeConfig: mergeConfig2
 } = axios_default;
 var anyMap2 = /* @__PURE__ */ new WeakMap();
@@ -9069,11 +9074,11 @@ var llm_Openai = new Llm_Openai();
 default_providers.push(llm_Openai);
 
 // llm_Oobabooga.js
-var LLM_PROVIDER_OOBABOOGA_LOCAL = "oobabooga";
+var MODEL_PROVIDER = "oobabooga";
+var PROVIDER_NAME = "Oobabooga";
 var LLM_MODEL_TYPE_OOBABOOGA = "oobabooga";
 var BLOCK_OOBABOOGA_SIMPLE_GENERATE_TEXT = "oobabooga.simpleGenerateText";
 var BLOCK_OOBABOOGA_MANAGE_MODEL = "oobabooga.manageModelComponent";
-var ICON_OOBABOOGA = "\u{1F4C1}";
 function parseModelResponse(model_response) {
   if (!model_response)
     return null;
@@ -9123,11 +9128,6 @@ var Llm_Oobabooga = class extends Llm {
 ${prompt3}`;
     if ("temperature" in args == false)
       args.temperature = temperature;
-    const response = await this.runLlmBlock(ctx, args);
-    return response;
-  }
-  async runLlmBlock(ctx, args) {
-    omnilog.warn(`block = ${BLOCK_OOBABOOGA_SIMPLE_GENERATE_TEXT}, args = ${JSON.stringify(args)}`);
     const response = await runBlock(ctx, BLOCK_OOBABOOGA_SIMPLE_GENERATE_TEXT, args);
     if (response.error)
       throw new Error(response.error);
@@ -9136,23 +9136,22 @@ ${prompt3}`;
       throw new Error("No results returned from oobabooga");
     const answer_text = results[0].text || null;
     if (!answer_text)
-      throw new Error("Empty text result returned from oobabooga. Did you load a model in oobabooga?");
-    const answer_json = {};
-    answer_json["answer_text"] = answer_text;
+      throw new Error("Empty text result returned from oobabooga.");
+    args.answer_text = answer_text;
     const return_value = {
       answer_text,
-      answer_json
+      answer_json: args
     };
     return return_value;
   }
   getProvider() {
-    return LLM_PROVIDER_OOBABOOGA_LOCAL;
+    return MODEL_PROVIDER;
   }
   getModelType() {
     return LLM_MODEL_TYPE_OOBABOOGA;
   }
   async getModelChoices(choices, llm_model_types, llm_context_sizes) {
-    await addLocalLlmChoices(choices, llm_model_types, llm_context_sizes, LLM_MODEL_TYPE_OOBABOOGA, LLM_PROVIDER_OOBABOOGA_LOCAL);
+    await addLocalLlmChoices(choices, llm_model_types, llm_context_sizes, LLM_MODEL_TYPE_OOBABOOGA, MODEL_PROVIDER);
   }
   // -------------------------------------------------
   async getCurrentModelInfoFromServer(ctx) {
@@ -9174,8 +9173,8 @@ ${prompt3}`;
     const model_names = await runBlock(ctx, BLOCK_OOBABOOGA_MANAGE_MODEL, { action: "list" });
     for (const model_name in model_names) {
       let title, description, model_type, context_size, memory_need;
-      const model_id = generateModelId(model_name, LLM_PROVIDER_OOBABOOGA_LOCAL);
-      title = deduceLlmTitle(model_name, LLM_PROVIDER_OOBABOOGA_LOCAL, ICON_OOBABOOGA);
+      const model_id = generateModelId(model_name, MODEL_PROVIDER);
+      title = deduceLlmTitle(model_name, MODEL_PROVIDER);
       description = deduceLlmDescription(model_name);
       llm_model_types[model_name] = LLM_MODEL_TYPE_OOBABOOGA;
       llm_context_sizes[model_name] = DEFAULT_UNKNOWN_CONTEXT_SIZE;
@@ -9204,9 +9203,8 @@ ${prompt3}`;
 };
 
 // component_LlmManager_Oobabooga.js
-var NS_ONMI = "document_processing";
 var llm = new Llm_Oobabooga();
-async function async_getLlmManagerOobaboogaComponent() {
+async function async_getLlmManagerComponent_Oobabooga() {
   const choices = [];
   const llm_model_types = {};
   const llm_context_sizes = {};
@@ -9227,8 +9225,8 @@ async function async_getLlmManagerOobaboogaComponent() {
   ];
   const controls = null;
   const links2 = {};
-  let component = createComponent(NS_ONMI, "llm_manager_oobabooga", "LLM Manager: Oobabooga (!!)", "Text Manipulation", "Manage LLMs from a provider: Oobabooga", "Manage LLMs from a provider: Oobabooga", links2, inputs, outputs, controls, parsePayload);
-  return component;
+  const LlmManagerComponent = createComponent(MODEL_PROVIDER, "llm_manager", `LLM Manager: ${PROVIDER_NAME}`, "Text Generation", `Manage LLMs from provider: ${PROVIDER_NAME}`, `Manage LLMs from provider: ${PROVIDER_NAME}`, links2, inputs, outputs, controls, parsePayload);
+  return LlmManagerComponent;
 }
 async function parsePayload(payload, ctx) {
   const failure = { result: { "ok": false }, model_id: null };
@@ -9321,7 +9319,6 @@ function extractPayload(payload, model_provider) {
 }
 
 // component_LlmQuery_Oobabooga.js
-var MODEL_PROVIDER = "oobabooga";
 var llm2 = new Llm_Oobabooga();
 var links = {};
 var LlmQueryComponent_Oobabooga = createLlmQueryComponent(MODEL_PROVIDER, links, runProviderPayload);
@@ -9333,8 +9330,8 @@ async function runProviderPayload(payload, ctx) {
 
 // extension.js
 async function CreateComponents() {
-  const LlmManagerOobaboogaComponent = await async_getLlmManagerOobaboogaComponent();
-  const components = [LlmManagerOobaboogaComponent, LlmQueryComponent_Oobabooga];
+  const LlmManagerComponent_Oobabooga = await async_getLlmManagerComponent_Oobabooga();
+  const components = [LlmManagerComponent_Oobabooga, LlmQueryComponent_Oobabooga];
   return {
     blocks: components,
     patches: []

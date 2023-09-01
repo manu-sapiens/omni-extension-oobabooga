@@ -2,12 +2,11 @@
 import { createComponent } from 'omnilib-utils/component.js';
 import { DEFAULT_LLM_MODEL_ID } from 'omnilib-llms/llms.js';
 import { getModelNameAndProviderFromId, isProviderAvailable, DEFAULT_UNKNOWN_CONTEXT_SIZE } from 'omnilib-llms/llm.js';
-import { Llm_Oobabooga } from './llm_Oobabooga.js'
-const NS_ONMI = 'document_processing';
+import { Llm_Oobabooga, MODEL_PROVIDER, PROVIDER_NAME } from './llm_Oobabooga.js'
 
 const llm = new Llm_Oobabooga();
 
-export async function async_getLlmManagerOobaboogaComponent()
+export async function async_getLlmManagerComponent_Oobabooga()
 {
     const choices = [];
     const llm_model_types = {};
@@ -31,9 +30,8 @@ export async function async_getLlmManagerOobaboogaComponent()
     const controls = null;
     const links = {}
 
-    let component = createComponent(NS_ONMI, 'llm_manager_oobabooga','LLM Manager: Oobabooga (!!)', 'Text Manipulation','Manage LLMs from a provider: Oobabooga', 'Manage LLMs from a provider: Oobabooga', links, inputs, outputs, controls, parsePayload );
-
-    return component;
+    const LlmManagerComponent = createComponent(MODEL_PROVIDER, 'llm_manager',`LLM Manager: ${PROVIDER_NAME}`, 'Text Generation',`Manage LLMs from provider: ${PROVIDER_NAME}`, `Manage LLMs from provider: ${PROVIDER_NAME}`, links, inputs, outputs, controls, parsePayload );
+    return LlmManagerComponent;
 }
 
 

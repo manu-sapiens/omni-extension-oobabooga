@@ -4,7 +4,8 @@ import { omnilog } from 'mercs_shared'
 import { runBlock } from 'omnilib-utils/blocks.js';
 import { Llm, generateModelId, deduceLlmTitle, deduceLlmDescription, addLocalLlmChoices, DEFAULT_UNKNOWN_CONTEXT_SIZE} from 'omnilib-llms/llm.js'
 import { Tokenizer_Openai } from 'omnilib-llms/tokenizer_Openai.js' // TBD: use llama tokenizer: https://github.com/belladoreai/llama-tokenizer-js
-const LLM_PROVIDER_OOBABOOGA_LOCAL = "oobabooga";
+export const MODEL_PROVIDER = "oobabooga";
+export const PROVIDER_NAME = "Oobabooga";
 const LLM_MODEL_TYPE_OOBABOOGA = "oobabooga";
 const BLOCK_OOBABOOGA_SIMPLE_GENERATE_TEXT = "oobabooga.simpleGenerateText";
 const BLOCK_OOBABOOGA_MANAGE_MODEL = "oobabooga.manageModelComponent";
@@ -75,19 +76,6 @@ export class Llm_Oobabooga extends Llm
         if ("prompt" in args == false) args.prompt = `${instruction}\n\n${prompt}`; // It is possible to overwrite the prompt by passing it as a parameter in args
         if ("temperature" in args == false) args.temperature = temperature;
 
-        const response = await this.runLlmBlock(ctx, args);
-        return response;
-    }
-
-    async runLlmBlock(ctx, args)
-    {
-        // TBD ensure all the runLLM blocks have the same exact response format
-        // or clean it up here for ooabooga
-
-
-
-        omnilog.warn(`block = ${BLOCK_OOBABOOGA_SIMPLE_GENERATE_TEXT}, args = ${JSON.stringify(args)}`);
-
         const response = await runBlock(ctx, BLOCK_OOBABOOGA_SIMPLE_GENERATE_TEXT, args);
         if (response.error) throw new Error(response.error);
 
@@ -95,14 +83,13 @@ export class Llm_Oobabooga extends Llm
         if (results.length == 0) throw new Error("No results returned from oobabooga");
 
         const answer_text = results[0].text || null;
-        if (!answer_text) throw new Error("Empty text result returned from oobabooga. Did you load a model in oobabooga?");
+        if (!answer_text) throw new Error("Empty text result returned from oobabooga.");
 
-        const answer_json = {};
-        answer_json["answer_text"] = answer_text;
-
+        args.answer_text = answer_text;
+      
         const return_value = {
             answer_text: answer_text,
-            answer_json: answer_json,
+            answer_json: args,
         };
 
         return return_value;
@@ -110,7 +97,7 @@ export class Llm_Oobabooga extends Llm
 
     getProvider()
     {
-        return LLM_PROVIDER_OOBABOOGA_LOCAL;
+        return MODEL_PROVIDER;
     }
 
     getModelType()
@@ -120,7 +107,7 @@ export class Llm_Oobabooga extends Llm
 
     async getModelChoices(choices, llm_model_types, llm_context_sizes)
     {
-        await addLocalLlmChoices(choices, llm_model_types, llm_context_sizes, LLM_MODEL_TYPE_OOBABOOGA, LLM_PROVIDER_OOBABOOGA_LOCAL);
+        await addLocalLlmChoices(choices, llm_model_types, llm_context_sizes, LLM_MODEL_TYPE_OOBABOOGA, MODEL_PROVIDER);
     }
 
     // -------------------------------------------------
@@ -160,9 +147,9 @@ export class Llm_Oobabooga extends Llm
         {
             let title, description, model_type, context_size, memory_need;
 
-            const model_id = generateModelId(model_name, LLM_PROVIDER_OOBABOOGA_LOCAL)
+            const model_id = generateModelId(model_name, MODEL_PROVIDER)
 
-            title = deduceLlmTitle(model_name, LLM_PROVIDER_OOBABOOGA_LOCAL, ICON_OOBABOOGA);
+            title = deduceLlmTitle(model_name, MODEL_PROVIDER);
             description = deduceLlmDescription(model_name);
 
             llm_model_types[model_name] = LLM_MODEL_TYPE_OOBABOOGA;

@@ -1,13 +1,12 @@
 //@ts-check
 // extension.js
-import { async_getLlmManagerOobaboogaComponent } from "./component_LlmManager_Oobabooga"; 
+import { async_getLlmManagerComponent_Oobabooga } from "./component_LlmManager_Oobabooga"; 
 import { LlmQueryComponent_Oobabooga } from "./component_LlmQuery_Oobabooga.js";
-
 
 async function CreateComponents() 
 {
-  const LlmManagerOobaboogaComponent = await async_getLlmManagerOobaboogaComponent();
-  const components = [LlmManagerOobaboogaComponent, LlmQueryComponent_Oobabooga ];
+  const LlmManagerComponent_Oobabooga = await async_getLlmManagerComponent_Oobabooga();
+  const components = [LlmManagerComponent_Oobabooga, LlmQueryComponent_Oobabooga ];
 
   return {
     blocks: components,
