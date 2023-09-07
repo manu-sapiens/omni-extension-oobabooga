@@ -37,7 +37,7 @@ const buildOptions_fix = {
       bundle : true,
       entryPoints: ['./extension.js'],
       outfile: '../server/extension.js',
-      external: ['mercs_rete'],
+      external: ['mercs_rete',"mercs_shared"],
       loader: {
         '.node': 'binary',
       },  
@@ -67,6 +67,7 @@ const result = esbuild.build(buildOptions_fix).then((result) =>
   // Log some summary information
   const { inputs } = result.metafile;
   const inputCount = Object.keys(inputs).length;
+  //@ts-ignore
   const totalInputBytes = Object.values(result.metafile.inputs).reduce((sum, input) => sum + input.bytes, 0);
 
   console.log(`Total input files: ${inputCount}`);
@@ -75,6 +76,7 @@ const result = esbuild.build(buildOptions_fix).then((result) =>
   // Log some summary information about the outputs
   const { outputs } = result.metafile;
   const outputCount = Object.keys(outputs).length;
+  //@ts-ignore
   const totalOutputBytes = Object.values(result.metafile.outputs).reduce((sum, output) => sum + output.bytes, 0);
 
   console.log(`Total output files: ${outputCount}`);

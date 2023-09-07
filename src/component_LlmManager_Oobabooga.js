@@ -1,20 +1,22 @@
 //@ts-check
 import { createComponent } from 'omnilib-utils/component.js';
-import { DEFAULT_LLM_MODEL_ID } from 'omnilib-llms/llms.js';
-import { getModelNameAndProviderFromId, isProviderAvailable, DEFAULT_UNKNOWN_CONTEXT_SIZE } from 'omnilib-llms/llm.js';
+import { generateModelId } from 'omnilib-llms/llm.js';
 import { Llm_Oobabooga, MODEL_PROVIDER, PROVIDER_NAME } from './llm_Oobabooga.js'
 
 const llm = new Llm_Oobabooga();
 
 export async function async_getLlmManagerComponent_Oobabooga()
 {
-    const choices = [];
-    const llm_model_types = {};
-    const llm_context_sizes = {};
-    await llm.getModelChoices(choices, llm_model_types, llm_context_sizes);
+
+    const model_choices = {
+        "block": "oobabooga.manageModelComponent",
+        "args": {"action": "list"},
+        "cache": "user",
+        "map": { "root": "result" }
+    };
 
     const inputs = [
-        { name: 'model_id', type: 'string', customSocket: 'text', defaultValue: DEFAULT_LLM_MODEL_ID, choices: choices},
+        { name: 'model', type: 'string', customSocket: 'text', choices: model_choices},
         { name: 'use_gpu', type: 'boolean', defaultValue: false},
         { name: 'seed', type: 'number', defaultValue: -1, minimum: -1, maximum: 32768, step:1, description: "A number used to determine the initial noise distribution for the text generation process. Different seed values will create unique text results. The special value, -1, will generate a random seed instead."},
         { name: 'negative_prompt', type: 'string', customSocket: 'text', defaultValue: "", description: "A text description that guides the text generation process, but with a negative connotation."},
@@ -26,6 +28,7 @@ export async function async_getLlmManagerComponent_Oobabooga()
         { name: 'model_id', type: 'string', customSocket: 'text', description: "The ID of the selected LLM model"},
         { name: 'args', type: 'object', customSocket: 'object', description: 'Extra arguments provided to the LLM'},
         { name: 'model_info', type: 'object', customSocket: 'object', description: 'Information about the selected model'},
+        { name: 'model_name', type: 'string', customSocket: 'text', description: "The name of the selected LLM model"},
     ]
     const controls = null;
     const links = {}
@@ -41,7 +44,8 @@ async function parsePayload(payload, ctx)
 
     if (!payload) return failure;
     
-    const model_id = payload.model_id;
+    const model_name = payload.model;
+
     const use_gpu = payload.use_gpu || false;
     const seed = payload.seed || -1;
     const negative_prompt = payload.negative_prompt || "";
@@ -49,10 +53,9 @@ async function parsePayload(payload, ctx)
     const llm_args = payload.llm_args || {};
     const loader_args = payload.loader_args || {};
 
-    const splits = getModelNameAndProviderFromId(model_id);
-    const model_name = splits.model_name;
-    const model_provider = splits.model_provider;
 
+
+    const model_id = generateModelId(model_name, MODEL_PROVIDER);
    
     if ("no_stream" in loader_args == false) loader_args["no_stream"] = true;
     if ("n-gpu-layers" in loader_args == false) 
@@ -67,6 +70,6 @@ async function parsePayload(payload, ctx)
     
     let model_info = await llm.loadModelIfNeeded(ctx, model_name, loader_args);
 
-    const return_value = { result: { "ok": true }, model_id: model_id, args: llm_args, model_info: model_info};
+    const return_value = { result: { "ok": true }, model_id: model_id, args: llm_args, model_info: model_info, model_name: model_name};
     return return_value;
 }

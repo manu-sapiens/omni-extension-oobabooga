@@ -13,7 +13,14 @@ const ICON_OOBABOOGA = '📁';
 
 function parseModelResponse(model_response)
 {
+   
+    return model_response;
+    // TBD remove this function altogether
+
     if (!model_response) return null;
+    const model_name = model_response?.model_name;
+    return model_name;
+    /*
     let nestedResult = JSON.parse(model_response);
 
     // Rename the keys
@@ -28,6 +35,7 @@ function parseModelResponse(model_response)
     }
 
     return nestedResult;
+    */
 }
 
 export class Llm_Oobabooga extends Llm
@@ -149,7 +157,7 @@ export class Llm_Oobabooga extends Llm
 
             const model_id = generateModelId(model_name, MODEL_PROVIDER)
 
-            title = deduceLlmTitle(model_name, MODEL_PROVIDER);
+            title = deduceLlmTitle(model_name, MODEL_PROVIDER, ICON_OOBABOOGA);
             description = deduceLlmDescription(model_name);
 
             llm_model_types[model_name] = LLM_MODEL_TYPE_OOBABOOGA;
