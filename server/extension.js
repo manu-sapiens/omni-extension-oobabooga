@@ -428,8 +428,12 @@ async function parsePayload(payload, ctx) {
   const seed = payload.seed || -1;
   const negative_prompt = payload.negative_prompt || "";
   const max_new_tokens = payload.max_new_tokens || 2e3;
-  const llm_args = payload.llm_args || {};
-  const loader_args = payload.loader_args || {};
+  let llm_args = payload.llm_args;
+  let loader_args = payload.loader_args;
+  if (!llm_args || llm_args == void 0)
+    llm_args = {};
+  if (!loader_args || loader_args == void 0)
+    loader_args = {};
   const model_id = generateModelId(model_name, MODEL_PROVIDER);
   if ("no_stream" in loader_args == false)
     loader_args["no_stream"] = true;
@@ -486,11 +490,21 @@ function createLlmQueryComponent(model_provider, links2, payloadParser) {
 function extractPayload(payload, model_provider) {
   if (!payload)
     throw new Error("No payload provided.");
-  const instruction = payload.instruction;
-  const prompt = payload.prompt;
-  const temperature = payload.temperature || 0;
-  const model_id = payload.model_id;
-  const args = payload.args;
+  let args = payload.args;
+  if (!args || args == void 0)
+    args = {};
+  let instruction = null;
+  let prompt = null;
+  let temperature = null;
+  let model_id = null;
+  if ("instruction" in args == false)
+    instruction = payload.instruction;
+  if ("prompt" in args == false)
+    prompt = payload.prompt;
+  if ("temperature" in args == false)
+    temperature = payload.temperature || 0;
+  if ("model_id" in args == false)
+    model_id = payload.model_id;
   if (!prompt)
     throw new Error(`ERROR: no prompt provided!`);
   const splits = getModelNameAndProviderFromId(model_id);

@@ -50,11 +50,12 @@ async function parsePayload(payload, ctx)
     const seed = payload.seed || -1;
     const negative_prompt = payload.negative_prompt || "";
     const max_new_tokens = payload.max_new_tokens || 2000;
-    const llm_args = payload.llm_args || {};
-    const loader_args = payload.loader_args || {};
+    let llm_args = payload.llm_args;
+    let loader_args = payload.loader_args;
 
-
-
+    if (!llm_args || llm_args == undefined) llm_args = {}
+    if (!loader_args || loader_args == undefined) loader_args = {}
+    
     const model_id = generateModelId(model_name, MODEL_PROVIDER);
    
     if ("no_stream" in loader_args == false) loader_args["no_stream"] = true;

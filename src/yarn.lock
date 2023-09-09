@@ -584,10 +584,10 @@ __metadata:
 
 "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#main":
   version: 1.0.0
-  resolution: "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#commit=dc338f9e1bb99a4e601cf609cbe7bd6f6d7be651"
+  resolution: "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#commit=d73ba92e612c6c886fdb1a4edd1c072f1bd0bcac"
   dependencies:
     omnilib-utils: "https://github.com/manu-sapiens/omnilib-utils.git#main"
-  checksum: 48a4076580e74c390f9430a2c6003d1e178a0e330edec72089607c7b5d3ebfecdcf6226c24134d88c8023b36f29f9f38deeb0ec8c07e3d59ce31d2051b62d0cc
+  checksum: c025e4a5f87c3d2189603285366cbb97c15c8e55dc704d1d99c5003fb5aeb8d105af4f2880038166abfcc775e9810580d79dbd12cf5c6acf584066c4b09c6536
   languageName: node
   linkType: hard
 
