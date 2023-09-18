@@ -1,26 +1,14 @@
+//@ts-check
+// -----------------------------
+const externals= ['mercs_rete', 'omni-shared', 'mercs_client', 'gpt-tokenizer'];
+const build_fix = true;
+// -----------------------------
+// -----------------------------
+// -----------------------------
 const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path')
 
-/*
-const { commonjs } = require("@hyrious/esbuild-plugin-commonjs");
-
-
-const buildOptions_plugin = {
-  entryPoints: ['./extension.js'],
-  bundle: true,
-  outfile: '../server/extension.js',
-  format: 'esm',
-  platform: 'node',
-  target: 'es2020',
-  external: ['mercs_rete'], // Add other options as needed
-  loader: {
-    '.node': 'binary',
-  },  
-  metafile: true,
-  plugins: [commonjs()],
-};
-*/
 const ESM_REQUIRE_SHIM = `
 await(async()=>{let{dirname:e}=await import("path"),{fileURLToPath:i}=await import("url");if(typeof globalThis.__filename>"u"&&(globalThis.__filename=i(import.meta.url)),typeof globalThis.__dirname>"u"&&(globalThis.__dirname=e(globalThis.__filename)),typeof globalThis.require>"u"){let{default:a}=await import("module");globalThis.require=a.createRequire(import.meta.url)}})();
 `;
@@ -30,39 +18,29 @@ const shimBanner = {
   "js": ESM_REQUIRE_SHIM
 };
 
-const externals = ['mercs_rete', 'mercs_shared', 'mercs_client', 'gpt-tokenizer' ];
-const buildOptions_fix = {
-      format: "esm",
-      target: "esnext",
-      platform: "node",
-      banner: shimBanner,
-      bundle : true,
-      entryPoints: ['./extension.js'],
-      outfile: '../server/extension.js',
-      external: externals,
-      loader: {
-        '.node': 'binary',
-      },  
-      metafile: true,
-    };
+const entryPoints = ['./extension.js'];
+const format= "esm";
+const platform= "node";
+const outfile= '../server/extension.js';
+const loader= {  '.node': 'binary',};
+const metafile= true;
+const bundle = true;
 
-const buildOptions_simple = {
-  entryPoints: ['./extension.js'],
-  bundle: true,
-  outfile: '../server/extension.js',
-  format: 'esm',
-  platform: 'node',
-  target: 'es2020',
-  external: externals, // Add other options as needed
-  loader: {
-    '.node': 'binary',
-  },  
-  metafile: true,
+const buildOptions = {
+  entryPoints,
+  format,
+  platform,
+  outfile,
+  external: externals,
+  loader,
+  metafile,
+  bundle
 };
 
-build(buildOptions_fix);
+const buildOptions_fix_require = {...buildOptions, target: 'esnext', banner: shimBanner};
+const buildOptions_nofix = {...buildOptions, target: 'es2020'};
 
-
+if (build_fix) build(buildOptions_fix_require); else build(buildOptions_nofix);
 
 async function build(build_option) {
 

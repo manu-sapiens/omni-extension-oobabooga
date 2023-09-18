@@ -1,6 +1,5 @@
 //@ts-check
 //llm_Oobabooga.js
-import { omnilog } from 'mercs_shared'
 import { runBlock } from 'omnilib-utils/blocks.js';
 import { Llm, generateModelId, deduceLlmTitle, deduceLlmDescription, addLocalLlmChoices, DEFAULT_UNKNOWN_CONTEXT_SIZE} from 'omnilib-llms/llm.js'
 import { Tokenizer_Openai } from 'omnilib-llms/tokenizer_Openai.js' // TBD: use llama tokenizer: https://github.com/belladoreai/llama-tokenizer-js
@@ -15,27 +14,7 @@ function parseModelResponse(model_response)
 {
    
     return model_response;
-    // TBD remove this function altogether
 
-    if (!model_response) return null;
-    const model_name = model_response?.model_name;
-    return model_name;
-    /*
-    let nestedResult = JSON.parse(model_response);
-
-    // Rename the keys
-    if (nestedResult['shared.settings']) {
-        nestedResult.shared_settings = nestedResult['shared.settings'];
-        delete nestedResult['shared.settings'];
-    }
-
-    if (nestedResult['shared.args']) {
-        nestedResult.shared_args = nestedResult['shared.args'];
-        delete nestedResult['shared.args'];
-    }
-
-    return nestedResult;
-    */
 }
 
 export class Llm_Oobabooga extends Llm
@@ -64,13 +43,7 @@ export class Llm_Oobabooga extends Llm
         // 1. at least one model manually copied into oobabbooga's models directory
         // 2. in oobabooga session tab, options --api and --listen checked (or used as cmdline parameters when launching oobabooga)
 
-        const model_info = await this.loadModelIfNeeded(ctx, model_name);
-
-        omnilog.log(`model_info = ${JSON.stringify(model_info)}`);
-
-        // debug
-        omnilog.warn(`model_info = ${JSON.stringify(model_info)}`);
-
+        await this.loadModelIfNeeded(ctx, model_name);
         const max_new_tokens = args?.max_new_tokens_max || 2000;
         const negative_prompt = args?.negative_prompt || "";
         const seed = args?.seed || -1;
