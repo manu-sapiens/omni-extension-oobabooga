@@ -584,17 +584,17 @@ __metadata:
 
 "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#main":
   version: 1.0.0
-  resolution: "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#commit=0c4ac781176f6cccc3e6be027ca76c7e00d2270f"
+  resolution: "omnilib-llms@https://github.com/manu-sapiens/omnilib-llms.git#commit=b51d0b6953c2dcf643df33ce429dd9af0bb56dba"
   dependencies:
     omnilib-utils: "https://github.com/manu-sapiens/omnilib-utils.git#main"
-  checksum: 3c202fe2b35c3e298947e7aebc32620126f5d886cf33a9a72f2e02441dc5e2a26f9a8f7cb2953f9367ccc2808a045e8bf47b51c66e9cc59bc35e1a4f9121f970
+  checksum: 4fda742f77af59f27091a418ae378c10a1602bc34d0531373351f5857851076ce3203861482dadcd8732029d324c5622f823ec8dcabf987fdd51b35bb9e00001
   languageName: node
   linkType: hard
 
 "omnilib-utils@https://github.com/manu-sapiens/omnilib-utils.git#main":
   version: 1.0.0
-  resolution: "omnilib-utils@https://github.com/manu-sapiens/omnilib-utils.git#commit=7a4e527573a6c197872a7de77a6d1778244a2465"
-  checksum: 20b50e5905071f09b9475fcf50712bfbe573bfbae03109a0c92fc42103b798eefdd0162463a3aec42484aa118f60313987ecaeddd8eb804ce5f2159910217dae
+  resolution: "omnilib-utils@https://github.com/manu-sapiens/omnilib-utils.git#commit=f051e4c9aedc0cca372133285483ac5b5cf1669d"
+  checksum: 3b1c1fc55ce3a9ddbea9eec2b9ce836a600d1102f8db039e9bd416909db96f51bfbc40f9c1c3e7913b67fd3b7e6bc25f62b2c6000897371c2fa416092f91c9a8
   languageName: node
   linkType: hard
 

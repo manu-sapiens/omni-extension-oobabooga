@@ -1,6 +1,7 @@
+
 //@ts-check
 // -----------------------------
-const externals= ['mercs_rete', 'omni-shared', 'mercs_client', 'gpt-tokenizer'];
+const externals= ['omni-sockets', 'omni-client-services', 'gpt-tokenizer', 'omni-shared'];
 const build_fix = true;
 // -----------------------------
 // -----------------------------

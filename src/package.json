@@ -2,8 +2,7 @@
   "name": "omni-extension-oobabooga",
   "packageManager": "yarn@3.3.1",
   "scripts": {
-    "build": "node yarn_build.ts",
-    "update": "node yarn_update.js"
+    "build": "node yarn_build.ts"
   },
   "dependencies": {
     "esnext": "^3.3.1",
