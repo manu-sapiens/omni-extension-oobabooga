@@ -5,9 +5,7 @@
     "build": "node yarn_build.ts"
   },
   "dependencies": {
-    "esnext": "^3.3.1",
-    "omnilib-llms": "https://github.com/manu-sapiens/omnilib-llms.git#main",
-    "omnilib-utils": "https://github.com/manu-sapiens/omnilib-utils.git#main"
+    "esnext": "^3.3.1"
   },
   "devDependencies": {
     "esbuild": "^0.19.2"

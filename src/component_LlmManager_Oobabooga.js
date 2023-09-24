@@ -1,6 +1,6 @@
 //@ts-check
-import { createComponent } from 'omnilib-utils/component.js';
-import { generateModelId } from 'omnilib-llms/llm.js';
+import { createComponent } from 'omni-utils'; //'omnilib-utils/component.js';
+import { generateModelId } from 'omni-utils'; //'omnilib-llms/llm.js';
 import { Llm_Oobabooga, MODEL_PROVIDER, PROVIDER_NAME } from './llm_Oobabooga.js'
 
 const llm = new Llm_Oobabooga();
