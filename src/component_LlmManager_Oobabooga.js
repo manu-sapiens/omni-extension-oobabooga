@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2023 MERCENARIES.AI PTE. LTD.
+ * All rights reserved.
+ */
+
 //@ts-check
 import { createComponent, generateModelId } from '../../../src/utils/omni-utils.js';
 import { Llm_Oobabooga, MODEL_PROVIDER, PROVIDER_NAME } from './llm_Oobabooga.js'

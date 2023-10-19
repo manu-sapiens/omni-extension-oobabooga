@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2023 MERCENARIES.AI PTE. LTD.
+ * All rights reserved.
+ */
+
 //@ts-check
 //llm_Oobabooga.js
 import { runBlock, Llm, generateModelId, deduceLlmTitle, deduceLlmDescription, addLocalLlmChoices, DEFAULT_UNKNOWN_CONTEXT_SIZE, Tokenizer_Openai } from '../../../src/utils/omni-utils.js';

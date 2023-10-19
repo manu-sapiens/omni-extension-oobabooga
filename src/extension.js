@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2023 MERCENARIES.AI PTE. LTD.
+ * All rights reserved.
+ */
+
 //@ts-check
 // extension.js
 import { async_getLlmManagerComponent_Oobabooga } from "./component_LlmManager_Oobabooga"; 
