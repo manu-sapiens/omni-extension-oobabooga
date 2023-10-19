@@ -1,7 +1,7 @@
 
 //@ts-check
 // -----------------------------
-const externals= ['omni-sockets', 'omni-client-services', 'gpt-tokenizer', 'omni-shared', 'omni-utils'];
+const externals= ['omni-sockets', 'omni-client-services', 'gpt-tokenizer', 'omni-shared', '../../../src/utils/omni-utils.js'];
 const build_fix = true;
 // -----------------------------
 // -----------------------------

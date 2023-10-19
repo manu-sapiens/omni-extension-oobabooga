@@ -1,8 +1,6 @@
 //@ts-check
 //llm_Oobabooga.js
-import { runBlock } from 'omni-utils'; //'omnilib-utils/blocks.js';
-import { Llm, generateModelId, deduceLlmTitle, deduceLlmDescription, addLocalLlmChoices, DEFAULT_UNKNOWN_CONTEXT_SIZE} from 'omni-utils'; //'omnilib-llms/llm.js'
-import { Tokenizer_Openai } from 'omni-utils'; //'omnilib-llms/tokenizer_Openai.js' // TBD: use llama tokenizer: https://github.com/belladoreai/llama-tokenizer-js
+import { runBlock, Llm, generateModelId, deduceLlmTitle, deduceLlmDescription, addLocalLlmChoices, DEFAULT_UNKNOWN_CONTEXT_SIZE, Tokenizer_Openai } from '../../../src/utils/omni-utils.js';
 
 export const MODEL_PROVIDER = "oobabooga";
 export const PROVIDER_NAME = "Oobabooga";

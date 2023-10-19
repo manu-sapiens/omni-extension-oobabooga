@@ -1,5 +1,5 @@
 //@ts-check
-import { async_getLlmQueryComponent, extractLlmQueryPayload } from 'omni-utils'; //'omnilib-llms/llmComponent';
+import { async_getLlmQueryComponent, extractLlmQueryPayload } from '../../../src/utils/omni-utils.js';
 
 import { Llm_Oobabooga, MODEL_PROVIDER} from './llm_Oobabooga.js'
 

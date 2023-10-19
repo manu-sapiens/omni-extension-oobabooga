@@ -3,13 +3,10 @@ await(async()=>{let{dirname:e}=await import("path"),{fileURLToPath:i}=await impo
 
 
 // component_LlmManager_Oobabooga.js
-import { createComponent } from "omni-utils";
-import { generateModelId as generateModelId2 } from "omni-utils";
+import { createComponent, generateModelId as generateModelId2 } from "../../../src/utils/omni-utils.js";
 
 // llm_Oobabooga.js
-import { runBlock } from "omni-utils";
-import { Llm, generateModelId, deduceLlmTitle, deduceLlmDescription, addLocalLlmChoices, DEFAULT_UNKNOWN_CONTEXT_SIZE } from "omni-utils";
-import { Tokenizer_Openai } from "omni-utils";
+import { runBlock, Llm, generateModelId, deduceLlmTitle, deduceLlmDescription, addLocalLlmChoices, DEFAULT_UNKNOWN_CONTEXT_SIZE, Tokenizer_Openai } from "../../../src/utils/omni-utils.js";
 var MODEL_PROVIDER = "oobabooga";
 var PROVIDER_NAME = "Oobabooga";
 var LLM_MODEL_TYPE_OOBABOOGA = "oobabooga";
@@ -191,7 +188,7 @@ async function parsePayload(payload, ctx) {
 }
 
 // component_LlmQuery_Oobabooga.js
-import { async_getLlmQueryComponent, extractLlmQueryPayload } from "omni-utils";
+import { async_getLlmQueryComponent, extractLlmQueryPayload } from "../../../src/utils/omni-utils.js";
 var llm2 = new Llm_Oobabooga();
 var links = {};
 async function get_LlmQueryComponent_Oobabooga() {
